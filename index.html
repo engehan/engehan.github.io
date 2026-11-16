@@ -4,770 +4,280 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Elizabeth Gehan</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Elizabeth Gehan — VP, Data Product Management. Data architecture and platform strategy.">
+<meta name="description" content="Elizabeth Gehan, VP of Data Product Management. Data architecture and platform strategy in New York.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: streaming-app home — sticky nav, billboard hero, then horizontally scrolling "rows" of title cards; click any card for a detail modal. Deliberately dark-only. */
+/* Layout: one reading column with a narrow mono "metadata" rail for dates and counts, like a data catalog entry. Light and dark. */
 :root {
-  --bg: #141414;
-  --surface: #1c1c1c;
-  --surface-2: #2a2a2a;
-  --line: #3a3a3a;
-  --fg: #ffffff;
-  --muted: #a8a8a8;
-  --dim: #6f6f6f;
-  --red: #e50914;
-  --red-deep: #8a0710;
-  --green: #46d369;
-  --font-display: "Bebas Neue", "Oswald", Impact, "Arial Narrow", sans-serif;
-  --font-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
-  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
-  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
-  --pad-x: clamp(16px, 4vw, 60px);
-  color-scheme: dark;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --ink: #12161d;
+  --muted: #5a6372;
+  --line: #dde1e8;
+  --accent: #1d5c8c;
+  --accent-soft: #e3edf6;
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1217; --surface: #161a21; --ink: #e9edf3; --muted: #98a2b3;
+    --line: #262c36; --accent: #7fb6e2; --accent-soft: #1a2633; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1217; --surface: #161a21; --ink: #e9edf3; --muted: #98a2b3;
+  --line: #262c36; --accent: #7fb6e2; --accent-soft: #1a2633; color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.5;
-  overflow-x: hidden;
-  margin: 0;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16.5px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-body::before {
-  content: ""; position: fixed; inset: 0 0 auto;
-  height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bg);
-}
-a { color: inherit; }
-button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; border-radius: 4px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
 
-.wrap {
-  padding-left: max(var(--pad-x), env(safe-area-inset-left, 0px));
-  padding-right: max(var(--pad-x), env(safe-area-inset-right, 0px));
+.page {
+  max-width: 980px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  padding-block: clamp(40px, 7vw, 88px) 64px;
 }
 
-/* ---------- NAV ---------- */
-.nav {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
-  display: flex; align-items: center; gap: clamp(16px, 3vw, 40px);
-  padding-block: 14px;
-  background: linear-gradient(to bottom, rgba(0,0,0,.85), rgba(0,0,0,0));
-  transition: background .3s;
+/* header */
+header { display: grid; gap: 18px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+.kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .04em; color: var(--muted); }
+.kicker b { color: var(--accent); font-weight: 500; }
+h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(44px, 8.5vw, 84px); line-height: .95; letter-spacing: -.035em;
+  margin: 0; text-wrap: balance;
 }
-.nav.solid { background: var(--bg); }
-.logo {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 40px);
-  color: var(--red);
-  letter-spacing: .02em;
-  text-decoration: none;
-  line-height: 1;
-  transform: scaleY(1.08);
-  text-shadow: 0 2px 10px rgba(229,9,20,.25);
-}
-.nav-links { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; font-size: 14px; }
-.nav-links a { text-decoration: none; color: #e5e5e5; transition: color .2s; }
-.nav-links a:hover { color: var(--muted); }
-.nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
-.avatar {
-  width: 34px; height: 34px; border-radius: 4px;
-  background: linear-gradient(135deg, #2b7de9, #1d4fa8);
-  display: grid; place-items: center;
-  font-family: var(--font-display); font-size: 20px; padding-top: 2px;
-}
-.nav-cta {
-  font-size: 13px; font-weight: 700; text-decoration: none;
-  background: var(--red); padding: 7px 14px; border-radius: 4px;
-}
-.nav-cta:hover { background: #f6121d; }
-@media (max-width: 760px) { .nav-links { display: none; } }
-
-/* ---------- HERO ---------- */
-.hero {
-  position: relative;
-  margin-top: -70px;
-  padding-top: 130px;
-  padding-bottom: clamp(60px, 9vw, 120px);
-  overflow: hidden;
-  isolation: isolate;
-}
-.hero-bg {
-  position: absolute; inset: 0; z-index: -2;
-  background:
-    radial-gradient(ellipse 70% 80% at 85% 30%, rgba(229,9,20,.38), transparent 60%),
-    radial-gradient(ellipse 50% 60% at 65% 90%, rgba(43,125,233,.18), transparent 60%),
-    linear-gradient(120deg, #0b0b0b 0%, #1a0607 55%, #2a0a0c 100%);
-}
-.hero-code {
-  position: absolute; z-index: -1;
-  right: -4%; top: 0; width: 62%; height: 100%;
-  font: 500 13px/1.75 ui-monospace, "SF Mono", Menlo, monospace;
-  color: rgba(255,255,255,.13);
-  white-space: pre;
-  overflow: hidden;
-  transform: perspective(900px) rotateY(-14deg) rotateZ(-3deg);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 35%, #000 80%, transparent 100%), linear-gradient(to bottom, transparent, #000 20%, #000 75%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to right, transparent 0%, #000 35%, #000 80%, transparent 100%);
-  pointer-events: none;
-}
-.hero-code-inner { animation: codeScroll 60s linear infinite; }
-.hero-code .kw { color: rgba(229,9,20,.45); }
-@keyframes codeScroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-.hero::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 160px; z-index: -1;
-  background: linear-gradient(to bottom, transparent, var(--bg));
-}
-.series-tag {
-  display: flex; align-items: center; gap: 10px;
-  font-weight: 800; letter-spacing: .35em; font-size: 13px; color: #ddd;
-}
-.series-tag .mono {
-  font-family: var(--font-display); color: var(--red);
-  font-size: 30px; letter-spacing: 0; line-height: 1; transform: scaleY(1.1);
-}
-.hero h1 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(64px, 12vw, 168px);
-  line-height: .86;
-  letter-spacing: .01em;
-  margin: 14px 0 18px;
-  max-width: 9ch;
-  text-wrap: balance;
-  text-shadow: 0 4px 30px rgba(0,0,0,.5);
-}
-.top10 {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-weight: 700; font-size: clamp(15px, 1.6vw, 20px);
-  margin-bottom: 14px;
-}
-.top10-badge {
-  background: var(--red); border-radius: 3px;
-  width: 30px; height: 32px; display: grid; place-items: center;
-  font-size: 7px; font-weight: 800; line-height: 1; text-align: center; letter-spacing: .02em;
-}
-.top10-badge b { display: block; font-size: 15px; letter-spacing: -.02em; }
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 15px; color: #ddd; margin-bottom: 14px; }
-.match { color: var(--green); font-weight: 800; }
-.rating {
-  border: 1px solid rgba(255,255,255,.55); padding: 0 6px; font-size: 12px; line-height: 20px; font-weight: 600;
-}
-.hd { border: 1px solid rgba(255,255,255,.45); border-radius: 3px; font-size: 10px; padding: 0 5px; font-weight: 700; line-height: 16px; }
-.hero p.lede {
-  max-width: 56ch; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.5;
-  color: #eee; margin: 0 0 26px; text-shadow: 0 1px 8px rgba(0,0,0,.6);
-}
-.btns { display: flex; flex-wrap: wrap; gap: 12px; }
-.btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  border: 0; border-radius: 4px; cursor: pointer;
-  font-weight: 700; font-size: clamp(15px, 1.4vw, 18px);
-  padding: 10px 26px 10px 22px; text-decoration: none;
-  transition: background .15s, transform .15s;
-}
-.btn:active { transform: scale(.97); }
-.btn-play { background: var(--fg); color: #000; }
-.btn-play:hover { background: rgba(255,255,255,.78); }
-.btn-info { background: rgba(109,109,110,.7); color: var(--fg); }
-.btn-info:hover { background: rgba(109,109,110,.45); }
-.btn svg { width: 22px; height: 22px; flex: none; }
-
-/* ---------- ROWS ---------- */
-main { position: relative; z-index: 1; margin-top: -40px; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 48px); padding-bottom: 40px; }
-.row h2 {
-  font-size: clamp(17px, 1.7vw, 22px); font-weight: 700; margin: 0 0 4px;
-  display: flex; align-items: baseline; gap: 12px;
-}
-.row h2 .explore { font-size: 13px; color: #54b9c5; font-weight: 600; opacity: 0; transform: translateX(-6px); transition: .25s; }
-.row:hover h2 .explore { opacity: 1; transform: none; }
-.row-shell { position: relative; }
-.scroller {
-  display: flex; gap: 8px;
-  overflow-x: auto; overflow-y: hidden;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  padding-block: 18px 22px;
-  scrollbar-width: none;
-  scroll-padding-left: max(var(--pad-x), env(safe-area-inset-left, 0px));
-}
-.scroller::-webkit-scrollbar { display: none; }
-#row-skills { padding-top: 36px; }
-.scroller > * { scroll-snap-align: start; flex: none; }
-.arrow {
-  position: absolute; top: 18px; bottom: 22px; width: max(var(--pad-x), 44px); z-index: 4;
-  border: 0; background: rgba(20,20,20,.6); cursor: pointer;
-  display: grid; place-items: center; opacity: 0; transition: opacity .2s, background .2s;
-}
-.arrow svg { width: 30px; height: 30px; transition: transform .2s; }
-.arrow:hover svg { transform: scale(1.25); }
-.arrow:hover { background: rgba(20,20,20,.8); }
-.arrow.l { left: 0; } .arrow.r { right: 0; }
-.row-shell:hover .arrow, .arrow:focus-visible { opacity: 1; }
-.arrow[hidden] { display: none !important; }
-@media (hover: none) { .arrow { display: none; } }
-
-/* card base */
-.card {
-  position: relative; cursor: pointer; border: 0; padding: 0; text-align: left;
-  border-radius: 6px; overflow: hidden;
-  background: var(--surface);
-  transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
-}
-.card:hover, .card:focus-visible { transform: scale(1.06); z-index: 3; box-shadow: 0 14px 34px rgba(0,0,0,.7); }
-
-/* role cards (16:9 posters) */
-.role { width: clamp(250px, 26vw, 340px); }
-.poster {
-  aspect-ratio: 16 / 9; max-width: 100%; position: relative;
-  padding: 14px 16px; display: flex; flex-direction: column; justify-content: flex-end;
-  overflow: hidden;
-}
-.poster::before {
-  content: ""; position: absolute; inset: 0;
-  background: repeating-linear-gradient(115deg, rgba(255,255,255,.04) 0 2px, transparent 2px 14px);
-}
-.poster .ghost {
-  position: absolute; right: -8px; top: -18px;
-  font-family: var(--font-display); font-size: 120px; line-height: 1;
-  color: rgba(255,255,255,.08);
-}
-.poster .badge-n {
-  position: absolute; top: 10px; left: 12px;
-  font-family: var(--font-display); color: var(--red); font-size: 22px; line-height: 1;
-}
-.poster .flag {
-  position: absolute; top: 10px; right: 0;
-  background: var(--red); font-size: 10px; font-weight: 800; letter-spacing: .06em;
-  padding: 3px 8px; border-radius: 2px 0 0 2px;
-}
-.poster .t {
-  position: relative;
-  font-family: var(--font-display); font-size: clamp(26px, 2.5vw, 32px); line-height: .95;
-  text-shadow: 0 2px 12px rgba(0,0,0,.6); text-wrap: balance;
-}
-.poster .s { position: relative; font-size: 12px; font-weight: 700; color: rgba(255,255,255,.85); letter-spacing: .02em; }
-.card-foot { padding: 10px 14px 12px; display: grid; gap: 6px; }
-.card-foot .line1 { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; }
-.card-foot .line1 span:last-child { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
-.progress { height: 3px; background: #4d4d4d; border-radius: 2px; overflow: hidden; }
-.progress i { display: block; height: 100%; background: var(--red); }
-.art-1 { background: linear-gradient(140deg, #b20710 0%, #4a0308 70%, #1b0103 100%); }
-.art-2 { background: linear-gradient(140deg, #1e4f9c 0%, #0f2449 70%, #070f20 100%); }
-.art-3 { background: linear-gradient(140deg, #6b2fa3 0%, #2d1247 70%, #12071e 100%); }
-.art-4 { background: linear-gradient(140deg, #0f7c6c 0%, #08352f 70%, #031612 100%); }
-.art-5 { background: linear-gradient(140deg, #b8661a 0%, #4a280a 70%, #1c0f03 100%); }
-
-/* top 10 */
-.t10 { display: flex; align-items: flex-end; width: clamp(210px, 21vw, 270px); background: none; border-radius: 0; overflow: visible; }
-.t10:hover, .t10:focus-visible { box-shadow: none; }
-.t10 .num {
-  font-family: var(--font-display); font-size: clamp(150px, 14vw, 190px); line-height: .78;
-  color: var(--bg); -webkit-text-stroke: 3px #595959;
-  letter-spacing: -.06em; margin-right: -18px; position: relative; z-index: 0;
-  flex: none;
-}
-.t10 .tile {
-  position: relative; z-index: 1; width: 112px; flex: none;
-  aspect-ratio: 2 / 3; max-width: 100%; border-radius: 4px; overflow: hidden;
-  padding: 10px; display: flex; flex-direction: column; justify-content: flex-end;
-  box-shadow: -6px 0 16px rgba(0,0,0,.5);
-}
-.t10 .tile .badge-n { position: absolute; top: 8px; left: 9px; font-family: var(--font-display); color: var(--red); font-size: 17px; line-height: 1; }
-.t10 .tile .t { font-family: var(--font-display); font-size: 21px; line-height: .95; text-wrap: balance; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
-
-/* impact */
-.impact { width: clamp(200px, 19vw, 240px); }
-.impact .poster { aspect-ratio: 4 / 5; justify-content: space-between; padding: 16px; }
-.impact .big { position: relative; font-family: var(--font-display); font-size: clamp(64px, 6.2vw, 80px); line-height: .85; }
-.impact .big.long { font-size: clamp(40px, 3.8vw, 50px); line-height: .95; }
-.impact .what { position: relative; font-size: 13.5px; font-weight: 600; line-height: 1.35; }
-.impact .src { position: relative; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7); }
-
-/* credentials */
-.cred { width: clamp(230px, 22vw, 290px); }
-.cred .poster { aspect-ratio: 16 / 10; }
-.cred .yr { position: absolute; top: 12px; right: 14px; font-size: 12px; font-weight: 800; color: rgba(255,255,255,.75); font-variant-numeric: tabular-nums; }
-
-/* ---------- MODAL ---------- */
-dialog {
-  border: 0; padding: 0; color: var(--fg); background: var(--surface);
-  width: min(860px, calc(100vw - 24px)); max-height: calc(100dvh - 48px);
-  border-radius: 8px; overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0,0,0,.8);
-}
-dialog::backdrop { background: rgba(0,0,0,.72); }
-dialog[open] { animation: pop .28s cubic-bezier(.2,.8,.2,1); }
-@keyframes pop { from { opacity: 0; transform: scale(.94) translateY(16px); } to { opacity: 1; transform: none; } }
-.m-scroll { max-height: calc(100dvh - 48px); overflow-y: auto; }
-.m-hero { position: relative; aspect-ratio: 16 / 7; max-width: 100%; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px clamp(18px, 4vw, 44px); overflow: hidden; }
-.m-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--surface) 2%, transparent 60%); }
-.m-hero > * { position: relative; z-index: 1; }
-.m-hero .ghost { position: absolute; right: 0; top: -30px; font-family: var(--font-display); font-size: 260px; line-height: 1; color: rgba(255,255,255,.07); z-index: 0; }
-.m-hero h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(38px, 6vw, 64px); line-height: .9; margin: 6px 0 0; text-wrap: balance; }
-.m-hero .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .3em; color: #ddd; display: flex; gap: 8px; align-items: center; }
-.m-hero .eyebrow .mono { font-family: var(--font-display); color: var(--red); font-size: 24px; letter-spacing: 0; }
-.m-close {
-  position: absolute; top: 14px; right: 14px; z-index: 5;
-  width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer;
-  background: #181818; display: grid; place-items: center;
-}
-.m-close svg { width: 20px; height: 20px; }
-.m-body { padding: 8px clamp(18px, 4vw, 44px) 36px; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 28px; }
-@media (max-width: 640px) { .m-body { grid-template-columns: 1fr; } }
-.m-body .meta { margin-bottom: 12px; }
-.m-body .lead { font-size: 16px; margin: 0 0 16px; color: #eee; }
-.m-body ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
-.m-body li { position: relative; padding-left: 22px; color: #ddd; line-height: 1.55; }
-.m-body li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; background: var(--red); border-radius: 1px; transform: rotate(45deg); }
-.m-side { font-size: 13.5px; color: var(--muted); display: grid; gap: 12px; align-content: start; }
-.m-side b { color: var(--dim); font-weight: 600; }
-.m-side span { color: #ddd; }
-.episodes { grid-column: 1 / -1; border-top: 1px solid var(--line); padding-top: 22px; }
-.episodes h4 { font-size: 20px; margin: 0 0 12px; display: flex; justify-content: space-between; align-items: baseline; }
-.episodes h4 small { font-size: 14px; color: var(--muted); font-weight: 500; }
-.ep {
-  width: 100%; display: grid; grid-template-columns: 28px 96px minmax(0, 1fr) auto; gap: 16px; align-items: center;
-  padding: 14px 12px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; cursor: pointer; border-radius: 4px;
-}
-.ep:hover, .ep.on { background: var(--surface-2); }
-.ep .n { font-size: 22px; color: var(--muted); text-align: center; font-weight: 600; }
-.ep .thumb { aspect-ratio: 16 / 9; max-width: 100%; border-radius: 4px; display: grid; place-items: center; font-family: var(--font-display); font-size: 18px; }
-.ep .tt { font-weight: 700; font-size: 14.5px; }
-.ep .dd { font-size: 12.5px; color: var(--muted); }
-.ep .len { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-@media (max-width: 520px) { .ep { grid-template-columns: 22px minmax(0, 1fr) auto; } .ep .thumb { display: none; } }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font-size: 13px; padding: 5px 11px; border-radius: 999px; background: var(--surface-2); color: #e5e5e5; }
-
-/* ---------- FOOTER ---------- */
-footer { padding-block: 40px 60px; color: var(--muted); font-size: 13.5px; }
-.contact-card {
-  max-width: 980px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px;
-  padding-block: 28px; border-top: 1px solid var(--line); margin-bottom: 26px;
-}
-.contact-card h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 4vw, 48px); color: var(--fg); margin: 0; line-height: .9; flex-basis: 100%; }
-.contact-item { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.contact-item .lbl { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
-.contact-item .val { color: var(--fg); font-weight: 600; user-select: all; word-break: break-all; }
+.role { font-family: var(--font-display); font-weight: 600; font-size: clamp(19px, 2.4vw, 24px); letter-spacing: -.01em; margin: 0; }
+.role span { color: var(--muted); font-weight: 500; }
+.contact { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; font-size: 15px; }
+.contact .email { font-weight: 600; user-select: all; }
 .copy {
-  border: 1px solid var(--line); background: none; border-radius: 4px; padding: 4px 10px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--muted);
+  font: 500 12px var(--font-mono); color: var(--muted); cursor: pointer;
+  background: none; border: 1px solid var(--line); border-radius: 4px; padding: 3px 9px;
 }
-.copy:hover { color: var(--fg); border-color: var(--muted); }
-.links a { color: var(--fg); font-weight: 600; }
-.fine { color: var(--dim); font-size: 12px; }
+.copy:hover { color: var(--ink); border-color: var(--muted); }
+.dot { color: var(--line); }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+/* sections */
+section { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 12px 40px; padding-block: 40px; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+.label { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); letter-spacing: .03em; padding-top: 4px; }
+.label strong { display: block; font-family: var(--font-display); font-size: 15px; letter-spacing: -.005em; color: var(--ink); font-weight: 700; margin-bottom: 4px; }
+@media (max-width: 720px) { section { grid-template-columns: 1fr; gap: 16px; } }
+
+.summary p { margin: 0; font-size: clamp(17px, 2vw, 19.5px); line-height: 1.55; max-width: 62ch; }
+
+/* metrics */
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 26px; }
+.metric { background: var(--surface); padding: 18px 18px 16px; display: grid; gap: 4px; align-content: start; }
+.metric .n { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 4vw, 40px); line-height: 1; letter-spacing: -.03em; color: var(--accent); font-variant-numeric: tabular-nums; }
+.metric .t { font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+@media (max-width: 720px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* experience */
+.company { display: grid; gap: 4px; margin-bottom: 18px; }
+.company + .company, .ladder + .company { margin-top: 40px; }
+.company h3 { font-family: var(--font-display); font-size: 21px; font-weight: 700; letter-spacing: -.015em; margin: 0; }
+.company .meta { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 28px; position: relative; }
+.ladder.multi::before { content: ""; position: absolute; left: 5px; top: 10px; bottom: 10px; width: 2px; background: var(--line); }
+.ladder li { position: relative; padding-left: 30px; display: grid; gap: 6px; }
+.ladder li::before {
+  content: ""; position: absolute; left: 0; top: 7px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--accent);
+}
+.ladder li.current::before { background: var(--accent); }
+.rhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 16px; }
+.rhead h4 { font-family: var(--font-display); font-size: 17.5px; font-weight: 700; letter-spacing: -.01em; margin: 0; }
+.dates { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.focus { font-size: 14px; color: var(--accent); font-weight: 600; }
+.ladder ul { margin: 2px 0 0; padding-left: 18px; display: grid; gap: 7px; color: var(--ink); }
+.ladder ul li { padding: 0; display: list-item; }
+.ladder ul li::before { content: none; }
+.ladder ul li::marker { color: var(--muted); }
+.ladder ul strong { font-weight: 600; }
+
+/* skills */
+.groups { display: grid; gap: 22px; }
+.group h3 { font-family: var(--font-mono); font-size: 12.5px; font-weight: 500; color: var(--muted); letter-spacing: .03em; margin: 0 0 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 14px; padding: 5px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.chip.key { background: var(--accent-soft); border-color: transparent; color: var(--ink); font-weight: 600; }
+
+/* education */
+.edu { display: grid; gap: 22px; }
+.edu-item { display: grid; gap: 3px; }
+.edu-item .rhead h4 { font-size: 17px; }
+.edu-item p { margin: 0; color: var(--muted); font-size: 15px; }
+.certs { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.certs li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 13px 16px; border-top: 1px solid var(--line); }
+.certs li:first-child { border-top: 0; }
+.certs .c { font-weight: 600; }
+.certs .c span { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
+
+footer { padding-top: 28px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  header > * { animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
+  header > :nth-child(2) { animation-delay: .05s; } header > :nth-child(3) { animation-delay: .1s; } header > :nth-child(4) { animation-delay: .15s; }
+  @keyframes rise { from { opacity: .001; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 }
 </style>
 </head>
 <body>
-
-<nav class="nav wrap" id="nav" aria-label="Primary">
-  <a class="logo" href="#top" aria-label="Elizabeth Gehan, home">GEHAN</a>
-  <ul class="nav-links">
-    <li><a href="#career">Career</a></li>
-    <li><a href="#skills">Top 10</a></li>
-    <li><a href="#impact">Impact</a></li>
-    <li><a href="#credentials">Credentials</a></li>
-  </ul>
-  <div class="nav-right">
-    <a class="nav-cta" href="#contact">Get in touch</a>
-    <div class="avatar" aria-hidden="true">EG</div>
-  </div>
-</nav>
-
-<header class="hero wrap" id="top">
-  <div class="hero-bg"></div>
-  <div class="hero-code" aria-hidden="true"><div class="hero-code-inner" id="code"></div></div>
-
-  <div class="series-tag"><span class="mono">E</span>SERIES</div>
-  <h1>Elizabeth Gehan</h1>
-  <div class="top10">
-    <span class="top10-badge" aria-hidden="true">TOP<b>10</b></span>
-    #1 in Data Product Leadership Today
-  </div>
-  <div class="meta">
-    <span class="match">98% Match</span>
-    <span>2016–Present</span>
-    <span class="rating">TV-PM</span>
-    <span>8+ Seasons</span>
-    <span class="hd">HD</span>
-    <span>New York, NY</span>
-  </div>
-  <p class="lede">VP of Data Product Management who architects enterprise-scale data platforms. Snowflake, SQL and metadata architecture, run with a product mindset across 10 core warehouses and 60+ markets.</p>
-  <div class="btns">
-    <a class="btn btn-play" href="#career">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4v16a1 1 0 0 0 1.5.86l13-8a1 1 0 0 0 0-1.72l-13-8A1 1 0 0 0 6 4Z"/></svg>
-      Play
-    </a>
-    <button class="btn btn-info" type="button" id="moreInfo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-5M12 8h.01" stroke-linecap="round"/></svg>
-      More Info
-    </button>
-  </div>
-</header>
-
-<main>
-  <section class="row" id="career" aria-labelledby="h-career">
-    <h2 class="wrap" id="h-career">Continue Watching: Career <span class="explore">Explore all ›</span></h2>
-    <div class="row-shell"><div class="scroller wrap" id="row-career"></div></div>
-  </section>
-
-  <section class="row" id="skills" aria-labelledby="h-skills">
-    <h2 class="wrap" id="h-skills">Top 10 Skills Today</h2>
-    <div class="row-shell"><div class="scroller wrap" id="row-skills"></div></div>
-  </section>
-
-  <section class="row" id="impact" aria-labelledby="h-impact">
-    <h2 class="wrap" id="h-impact">Trending Now: Impact</h2>
-    <div class="row-shell"><div class="scroller wrap" id="row-impact"></div></div>
-  </section>
-
-  <section class="row" id="credentials" aria-labelledby="h-cred">
-    <h2 class="wrap" id="h-cred">Award Winners: Education &amp; Certifications</h2>
-    <div class="row-shell"><div class="scroller wrap" id="row-cred"></div></div>
-  </section>
-</main>
-
-<footer class="wrap" id="contact">
-  <div class="contact-card">
-    <h2>Ready to watch? Let’s talk.</h2>
-    <div class="contact-item">
-      <span class="lbl">Email</span>
-      <span class="val" id="email">elizabeth.gehan@gmail.com</span>
+<main class="page">
+  <header>
+    <div class="kicker"><b>●</b> New York, NY</div>
+    <h1>Elizabeth Gehan</h1>
+    <p class="role">VP, Data Product Management <span>· Data Architecture &amp; Platform Strategy</span></p>
+    <div class="contact">
+      <span class="email" id="email">elizabeth.gehan@gmail.com</span>
       <button class="copy" type="button" id="copyEmail">Copy</button>
-    </div>
-    <div class="contact-item links">
-      <span class="lbl">LinkedIn</span>
+      <span class="dot" aria-hidden="true">/</span>
       <a href="https://www.linkedin.com/in/elizabeth-gehan" target="_blank" rel="noopener">linkedin.com/in/elizabeth-gehan</a>
     </div>
-    <div class="contact-item">
-      <span class="lbl">Based in</span>
-      <span class="val" style="user-select:text">New York, NY</span>
+  </header>
+
+  <section class="summary" aria-labelledby="s-summary">
+    <div class="label" id="s-summary"><strong>Summary</strong>8+ years</div>
+    <div>
+      <p>Data product and platform strategy leader who architects enterprise-scale data ecosystems and delivers analytics-ready infrastructure across global organizations. Deep hands-on expertise in Snowflake, SQL, data modeling and metadata architecture, paired with a product mindset for platforms that are usable, well governed and consistent worldwide.</p>
+      <div class="metrics">
+        <div class="metric"><span class="n">85%</span><span class="t">increase in processing efficiency</span></div>
+        <div class="metric"><span class="n">60%</span><span class="t">improvement in data quality</span></div>
+        <div class="metric"><span class="n">40+</span><span class="t">engineers directed across 7 teams</span></div>
+        <div class="metric"><span class="n">60+</span><span class="t">markets on one data architecture</span></div>
+      </div>
     </div>
-  </div>
-  <p class="fine">© 2026 Elizabeth Gehan. A personal resume inspired by streaming interfaces; not affiliated with any streaming service.</p>
-</footer>
+  </section>
 
-<dialog id="modal" aria-labelledby="m-title">
-  <button class="m-close" type="button" id="mClose" aria-label="Close">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-  </button>
-  <div class="m-scroll" id="mContent"></div>
-</dialog>
-
-<script>
-(() => {
-  const NOW = new Date(2026, 10, 16);
-
-  const ROLES = [
-    { id: "vp", co: "Kinesso · IPG", loc: "New York, NY", season: "Season 4", art: "art-1", ghost: "VP",
-      title: "VP, Product Management", sub: "Data Platform & Strategy",
-      genre: "Data Architecture & Global Platform Strategy",
-      start: [2024, 3], end: null, dates: "Apr 2024 – Present",
-      lead: "Runs global data architecture and platform strategy for an enterprise-scale ecosystem.",
-      bullets: [
-        "Led a team of 7 product managers and analysts and directed 7 cross-functional engineering teams totaling 40+ engineers, orchestrating global data architecture and platform strategy across 10 core data warehouses, 60+ emerging markets, and 50+ data sources.",
-        "Owned global product roadmap design and execution while governing backend data models, metadata standards, access controls, and privacy-compliant workflows supporting enterprise-wide analytics, reducing data processing times from days to minutes.",
-        "Directed engineering priorities to improve ingestion reliability, performance, and scalability, driving an 85% increase in processing efficiency while providing hands-on SQL expertise and translating technical decisions for non-technical stakeholders and senior leaders."
-      ],
-      cast: ["Snowflake", "SQL", "Metadata Standards", "Access Controls", "Privacy"] },
-    { id: "dir", co: "Kinesso · IPG", loc: "New York, NY", season: "Season 3", art: "art-2", ghost: "DIR",
-      title: "Director, Data Products & Platform", sub: "Global Data Strategy",
-      genre: "Global Data Strategy & Platform Enablement",
-      start: [2021, 6], end: [2024, 2], dates: "Jul 2021 – Mar 2024",
-      lead: "Set global strategy for ingestion, enrichment and catalog, and rebuilt the Snowflake warehouse.",
-      bullets: [
-        "Drove global data strategy for ingestion, enrichment, and catalog development, including a comprehensive Snowflake warehouse redesign that established a scalable analytics environment and improved data freshness and usability.",
-        "Served as the primary liaison between technical and non-technical teams, translating business and market needs into roadmap priorities and engineering direction, increasing stakeholder satisfaction by 40%.",
-        "Managed data updates, new source testing, and QA via SQL to design reliable rollout processes, resulting in a 60% improvement in data quality and better data access for 300+ analysts and stakeholders."
-      ],
-      cast: ["Snowflake Redesign", "Data Catalog", "QA", "Roadmaps"] },
-    { id: "mgr", co: "Kinesso · IPG", loc: "New York, NY", season: "Season 2", art: "art-3", ghost: "MGR",
-      title: "Manager, Data Solutions & Strategy", sub: "Platform Modernization",
-      genre: "Data Strategy & Platform Modernization",
-      start: [2020, 3], end: [2021, 5], dates: "Apr 2020 – Jun 2021",
-      lead: "Rolled out a global data solution and led the move from Redshift to Snowflake.",
-      bullets: [
-        "Spearheaded a global data solution rollout across 10 markets with Engineering, Data Operations, and Product leadership, integrating new data pipelines and driving adoption of the global data architecture.",
-        "Managed the migration from Redshift to Snowflake through requirements definition, user testing and validation, global user training, and technical mentorship, boosting platform performance and reliability by over 50%."
-      ],
-      cast: ["Redshift → Snowflake", "Pipelines", "Training", "10 Markets"] },
-    { id: "sa", co: "Kinesso · IPG", loc: "New York, NY", season: "Season 1", art: "art-4", ghost: "SA",
-      title: "Senior Analyst, Data Analytics", sub: "Advanced Analytics & Modeling",
-      genre: "Advanced Analytics & Data Modeling",
-      start: [2018, 0], end: [2020, 2], dates: "Jan 2018 – Mar 2020",
-      lead: "Built pipelines and models in SQL, Python, R and SAS, and applied machine learning to 1st- and 3rd-party data.",
-      bullets: [
-        "Executed SQL, Python, R, and SAS workflows to build data pipelines and data models across diverse business use cases, improving analytical effectiveness by 25%.",
-        "Analyzed 1st- and 3rd-party data using machine learning techniques while modernizing SQL processing, reducing processing time by 30% and improving data reliability."
-      ],
-      cast: ["SQL", "Python", "R", "SAS", "Machine Learning"] },
-    { id: "nj", co: "NJ Higher Education Student Assistance Authority", loc: "Hamilton, NJ", season: "The Pilot", art: "art-5", ghost: "NJ",
-      title: "Program Manager, Grants & Scholarships", sub: "State of New Jersey · HESAA",
-      genre: "Data Platform Project Management",
-      start: [2016, 11], end: [2018, 0], dates: "Dec 2016 – Jan 2018",
-      lead: "Replaced a siloed manual process with a relational database for $1.5M in grants and scholarships.",
-      bullets: [
-        "Designed and implemented a relational database to replace a siloed manual process supporting $1.5M in grants and scholarships, improving auditability, data quality, and operational oversight.",
-        "Streamlined data structures and reporting workflows while managing adoption of the new platform, moving the team from legacy systems to a modern web-based environment."
-      ],
-      cast: ["Relational Databases", "Reporting", "Change Management"] }
-  ];
-
-  const SKILLS = [
-    ["Snowflake", "art-2", "SnowPro Associate certified. Led a full warehouse redesign and the Redshift-to-Snowflake migration."],
-    ["SQL", "art-1", "Hands-on daily: QA, new-source testing, and modernizing SQL processing for scale."],
-    ["Data Product Leadership", "art-3", "Leads PMs and analysts; directs 7 engineering teams of 40+ engineers."],
-    ["Data Architecture", "art-4", "Governs 10 core data warehouses across 60+ markets and 50+ sources."],
-    ["Global Roadmaps", "art-5", "Owns global roadmap design and execution for an enterprise data platform."],
-    ["Data Modeling", "art-2", "Backend data models built for analytics-ready, consistent global outputs."],
-    ["Governance & Privacy", "art-1", "Access controls and privacy-compliant workflows across the enterprise."],
-    ["Metadata Management", "art-3", "Sets the metadata standards that make data findable and trustworthy."],
-    ["AWS & Redshift", "art-4", "Cloud data experience on both sides of a major platform migration."],
-    ["Data Storytelling", "art-5", "Translates technical decisions for executives and non-technical teams."]
-  ];
-
-  const IMPACT = [
-    ["85%", "increase in processing efficiency", "VP · Kinesso", "art-1", "vp"],
-    ["Minutes", "data processing time, down from days", "VP · Kinesso", "art-2", "vp"],
-    ["60%", "improvement in data quality", "Director · Kinesso", "art-3", "dir"],
-    ["50%+", "gain in platform performance after the Redshift-to-Snowflake migration", "Manager · Kinesso", "art-4", "mgr"],
-    ["40%", "increase in stakeholder satisfaction", "Director · Kinesso", "art-5", "dir"],
-    ["300+", "analysts and stakeholders with better data access", "Director · Kinesso", "art-1", "dir"],
-    ["40+", "engineers across 7 teams directed", "VP · Kinesso", "art-2", "vp"],
-    ["60+", "emerging markets on one data architecture", "VP · Kinesso", "art-3", "vp"],
-    ["$1.5M", "in grants and scholarships on a new database", "Program Manager · NJ HESAA", "art-5", "nj"]
-  ];
-
-  const CREDS = [
-    { t: "SnowPro Associate: Platform", s: "Snowflake", yr: "2025", art: "art-2", d: "Snowflake certification covering platform architecture, data loading, and core features." },
-    { t: "Agile Scrum Product Owner", s: "EXIN", yr: "2025", art: "art-1", d: "Certification in backlog ownership, value delivery, and Scrum practice." },
-    { t: "Data Analytics Professional Certificate", s: "Google", yr: "2023", art: "art-4", d: "Professional certificate covering the analytics lifecycle, SQL, and visualization." },
-    { t: "BBA, Information Systems", s: "Loyola University Maryland", yr: "Baltimore", art: "art-3", d: "Bachelor of Business Administration in Information Systems with a minor in Spanish. Alpha Iota Delta Honor Society. Studied abroad in Madrid, Spain." },
-    { t: "Study Abroad, Madrid", s: "University of Alcalá de Henares", yr: "Spring 2015", art: "art-5", d: "A semester of study abroad at the University of Alcalá de Henares outside Madrid, Spain, alongside a minor in Spanish at Loyola." }
-  ];
-
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const months = (a, b) => (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) + 1;
-  const fmtLen = m => { const y = Math.floor(m / 12), r = m % 12; return [y ? y + "y" : "", r ? r + "m" : ""].filter(Boolean).join(" "); };
-  ROLES.forEach(r => {
-    const s = new Date(r.start[0], r.start[1]);
-    const e = r.end ? new Date(r.end[0], r.end[1]) : NOW;
-    r.months = months(s, e) - (r.end ? 0 : 1);
-    r.len = fmtLen(r.months);
-    r.year = r.start[0];
-  });
-
-  /* hero code texture */
-  const sql = [
-    "<span class=kw>SELECT</span> market, source_id, COUNT(*) AS records",
-    "<span class=kw>FROM</span> global_dw.audience_core",
-    "<span class=kw>WHERE</span> privacy_status = 'COMPLIANT'",
-    "<span class=kw>GROUP BY</span> 1, 2;",
-    "",
-    "<span class=kw>CREATE OR REPLACE TABLE</span> catalog.metadata_std <span class=kw>AS</span>",
-    "<span class=kw>SELECT</span> table_name, owner, refreshed_at, row_count",
-    "<span class=kw>FROM</span> information_schema.tables;",
-    "",
-    "<span class=kw>MERGE INTO</span> dw.enriched t <span class=kw>USING</span> stage.ingest s",
-    "  <span class=kw>ON</span> t.id = s.id",
-    "<span class=kw>WHEN MATCHED THEN UPDATE SET</span> t.freshness = CURRENT_TIMESTAMP()",
-    "<span class=kw>WHEN NOT MATCHED THEN INSERT</span> (id, market) <span class=kw>VALUES</span> (s.id, s.market);",
-    "",
-    "<span class=kw>GRANT SELECT ON</span> dw.analytics_ready <span class=kw>TO ROLE</span> analyst_global;",
-    "<span class=kw>ALTER WAREHOUSE</span> platform_wh <span class=kw>SET</span> WAREHOUSE_SIZE = 'LARGE';",
-    "",
-    "<span class=kw>WITH</span> qa <span class=kw>AS</span> (",
-    "  <span class=kw>SELECT</span> source_id, SUM(IFF(value <span class=kw>IS NULL</span>, 1, 0)) / COUNT(*) AS null_rate",
-    "  <span class=kw>FROM</span> stage.new_source <span class=kw>GROUP BY</span> 1",
-    ")",
-    "<span class=kw>SELECT</span> * <span class=kw>FROM</span> qa <span class=kw>WHERE</span> null_rate &lt; 0.02;",
-    ""
-  ].join("\n");
-  document.getElementById("code").innerHTML = sql + "\n" + sql + "\n" + sql + "\n" + sql;
-
-  /* rows */
-  const career = document.getElementById("row-career");
-  career.innerHTML = ROLES.map(r => {
-    const pct = r.end ? 100 : 62;
-    return `<button class="card role" type="button" data-role="${r.id}" aria-label="${esc(r.title)}, ${esc(r.dates)}">
-      <div class="poster ${r.art}">
-        <span class="ghost" aria-hidden="true">${esc(r.ghost)}</span>
-        <span class="badge-n" aria-hidden="true">E</span>
-        ${r.end ? "" : '<span class="flag">NOW STREAMING</span>'}
-        <span class="s">${esc(r.season)} · ${esc(r.co)}</span>
-        <span class="t">${esc(r.title)}</span>
+  <section aria-labelledby="s-exp">
+    <div class="label" id="s-exp"><strong>Experience</strong>5 roles · 2016–present</div>
+    <div>
+      <div class="company">
+        <h3>Kinesso, Interpublic Group (IPG)</h3>
+        <span class="meta">New York, NY · Jan 2018 – Present · promoted 3×</span>
       </div>
-      <div class="card-foot">
-        <div class="line1"><span>${esc(r.dates)}</span><span>${esc(r.len)}</span></div>
-        <div class="progress" aria-hidden="true"><i style="width:${pct}%"></i></div>
-      </div>
-    </button>`;
-  }).join("");
-
-  document.getElementById("row-skills").innerHTML = SKILLS.map(([name, art], i) =>
-    `<button class="card t10" type="button" data-skill="${i}" aria-label="Number ${i + 1}: ${esc(name)}">
-      <span class="num" aria-hidden="true">${i + 1}</span>
-      <span class="tile ${art}"><span class="badge-n" aria-hidden="true">E</span><span class="t">${esc(name)}</span></span>
-    </button>`).join("");
-
-  document.getElementById("row-impact").innerHTML = IMPACT.map(([big, what, src, art, role]) =>
-    `<button class="card impact" type="button" data-role="${role}" aria-label="${esc(big)} ${esc(what)}">
-      <div class="poster ${art}">
-        <span class="src">${esc(src)}</span>
-        <div><div class="big${big.length > 5 ? " long" : ""}">${esc(big)}</div><div class="what">${esc(what)}</div></div>
-      </div>
-    </button>`).join("");
-
-  document.getElementById("row-cred").innerHTML = CREDS.map((c, i) =>
-    `<button class="card cred" type="button" data-cred="${i}" aria-label="${esc(c.t)}, ${esc(c.s)}">
-      <div class="poster ${c.art}">
-        <span class="badge-n" aria-hidden="true">E</span>
-        <span class="yr">${esc(c.yr)}</span>
-        <span class="s">${esc(c.s)}</span>
-        <span class="t">${esc(c.t)}</span>
-      </div>
-    </button>`).join("");
-
-  /* arrows */
-  document.querySelectorAll(".row-shell").forEach(shell => {
-    const sc = shell.querySelector(".scroller");
-    const mk = (dir) => {
-      const b = document.createElement("button");
-      b.className = "arrow " + dir; b.type = "button";
-      b.setAttribute("aria-label", dir === "l" ? "Scroll left" : "Scroll right");
-      b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="${dir === "l" ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"}"/></svg>`;
-      b.addEventListener("click", () => sc.scrollBy({ left: (dir === "l" ? -1 : 1) * sc.clientWidth * 0.85, behavior: "smooth" }));
-      shell.appendChild(b); return b;
-    };
-    const l = mk("l"), r = mk("r");
-    const upd = () => {
-      l.hidden = sc.scrollLeft < 8;
-      r.hidden = sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 8;
-    };
-    sc.addEventListener("scroll", upd, { passive: true });
-    window.addEventListener("resize", upd);
-    upd();
-  });
-
-  /* modal */
-  const modal = document.getElementById("modal");
-  const content = document.getElementById("mContent");
-  const open = html => {
-    content.innerHTML = html; content.scrollTop = 0;
-    if (!modal.open) { try { modal.showModal(); } catch (e) { modal.setAttribute("open", ""); } }
-  };
-  const close = () => modal.open ? modal.close() : modal.removeAttribute("open");
-  document.getElementById("mClose").addEventListener("click", close);
-  modal.addEventListener("click", e => { if (e.target === modal) close(); });
-
-  const heroBlock = (art, ghost, eyebrow, title) =>
-    `<div class="m-hero ${art}"><span class="ghost" aria-hidden="true">${esc(ghost)}</span>
-      <div class="eyebrow"><span class="mono">E</span>${esc(eyebrow)}</div>
-      <h3 id="m-title">${esc(title)}</h3></div>`;
-
-  const roleModal = id => {
-    const r = ROLES.find(x => x.id === id);
-    const kin = ROLES.filter(x => x.co === r.co);
-    const eps = kin.length > 1 ? `<div class="episodes"><h4>Seasons <small>${esc(r.co)} · since 2018</small></h4>
-      ${kin.slice().reverse().map((k, i) => `<button class="ep${k.id === r.id ? " on" : ""}" type="button" data-role="${k.id}">
-        <span class="n">${i + 1}</span>
-        <span class="thumb ${k.art}">${esc(k.ghost)}</span>
-        <span><span class="tt">${esc(k.title)}</span><br><span class="dd">${esc(k.dates)}</span></span>
-        <span class="len">${esc(k.len)}</span>
-      </button>`).join("")}</div>` : "";
-    open(`${heroBlock(r.art, r.ghost, r.season.toUpperCase(), r.title)}
-      <div class="m-body">
-        <div>
-          <div class="meta"><span class="match">${r.end ? "Completed" : "Now Streaming"}</span><span>${r.year}</span><span class="rating">TV-PM</span><span>${esc(r.len)}</span><span class="hd">HD</span></div>
-          <p class="lead">${esc(r.lead)}</p>
-          <ul>${r.bullets.map(b => `<li>${esc(b)}</li>`).join("")}</ul>
-        </div>
-        <div class="m-side">
-          <div><b>Studio:</b> <span>${esc(r.co)}</span></div>
-          <div><b>Filmed in:</b> <span>${esc(r.loc)}</span></div>
-          <div><b>Genre:</b> <span>${esc(r.genre)}</span></div>
-          <div><b>Starring:</b> <span>${r.cast.map(esc).join(", ")}</span></div>
-        </div>
-        ${eps}
-      </div>`);
-  };
-
-  const skillModal = i => {
-    const [name, art, d] = SKILLS[i];
-    open(`${heroBlock(art, "#" + (i + 1), "TOP 10 SKILLS", name)}
-      <div class="m-body"><div>
-        <div class="meta"><span class="match">#${i + 1} today</span><span class="rating">TV-PM</span></div>
-        <p class="lead">${esc(d)}</p></div>
-        <div class="m-side"><div><b>Genre:</b> <span>Core competency</span></div></div>
-      </div>`);
-  };
-
-  const credModal = i => {
-    const c = CREDS[i];
-    open(`${heroBlock(c.art, c.yr.replace(/\D/g, "").slice(-2) || c.s[0], "AWARD WINNER", c.t)}
-      <div class="m-body"><div>
-        <div class="meta"><span class="match">${esc(c.s)}</span><span>${esc(c.yr)}</span></div>
-        <p class="lead">${esc(c.d)}</p></div>
-        <div class="m-side"><div><b>Issued by:</b> <span>${esc(c.s)}</span></div></div>
-      </div>`);
-  };
-
-  const allSkills = ["Data Product Leadership", "Global Product Roadmaps", "Data Architecture & Warehousing", "Data Strategy", "Snowflake", "SQL", "AWS", "Redshift", "Tableau", "Data Modeling", "Data Governance & Privacy", "Metadata Management", "Data Quality & QA", "Technical Requirements Translation", "Technical Data Storytelling", "Cross-Functional Leadership", "Agile / Scrum"];
-  document.getElementById("moreInfo").addEventListener("click", () => {
-    open(`${heroBlock("art-1", "EG", "SERIES", "Elizabeth Gehan")}
-      <div class="m-body">
-        <div>
-          <div class="meta"><span class="match">98% Match</span><span>2016–Present</span><span class="rating">TV-PM</span><span>8+ Seasons</span></div>
-          <p class="lead">Data product and platform strategy leader with 8+ years architecting enterprise-scale data ecosystems and delivering analytics-ready infrastructure across global organizations.</p>
+      <ol class="ladder multi">
+        <li class="current">
+          <div class="rhead"><h4>VP, Product Management, Data Platform &amp; Strategy</h4><span class="dates">Apr 2024 – Present</span></div>
+          <span class="focus">Data architecture &amp; global platform strategy</span>
           <ul>
-            <li>Deep technical expertise in Snowflake, SQL, data modeling, and metadata architecture, paired with a product mindset for building scalable platforms.</li>
-            <li>Improves usability, governance, and global consistency across data products.</li>
-            <li>Aligns business and technical priorities to shape platform strategy, guide engineering execution, and drive adoption across cross-functional teams.</li>
+            <li>Lead a team of 7 product managers and analysts and direct 7 cross-functional engineering teams of <strong>40+ engineers</strong>, orchestrating data architecture across 10 core data warehouses, 60+ emerging markets and 50+ data sources.</li>
+            <li>Own global roadmap design and execution while governing backend data models, metadata standards, access controls and privacy-compliant workflows, cutting data processing time <strong>from days to minutes</strong>.</li>
+            <li>Direct engineering priorities for ingestion reliability, performance and scale, driving an <strong>85% increase in processing efficiency</strong> while providing hands-on SQL expertise and translating technical decisions for senior leaders.</li>
           </ul>
+        </li>
+        <li>
+          <div class="rhead"><h4>Director, Data Products &amp; Platform</h4><span class="dates">Jul 2021 – Mar 2024</span></div>
+          <span class="focus">Global data strategy &amp; platform enablement</span>
+          <ul>
+            <li>Drove global strategy for ingestion, enrichment and catalog development, including a comprehensive <strong>Snowflake warehouse redesign</strong> that improved data freshness and usability.</li>
+            <li>Served as primary liaison between technical and business teams, turning market needs into roadmap priorities and raising <strong>stakeholder satisfaction 40%</strong>.</li>
+            <li>Ran data updates, new-source testing and QA in SQL, delivering a <strong>60% improvement in data quality</strong> and better data access for 300+ analysts.</li>
+          </ul>
+        </li>
+        <li>
+          <div class="rhead"><h4>Manager, Data Solutions &amp; Strategy</h4><span class="dates">Apr 2020 – Jun 2021</span></div>
+          <span class="focus">Data strategy &amp; platform modernization</span>
+          <ul>
+            <li>Led a global data solution rollout across 10 markets with Engineering, Data Operations and Product, integrating new pipelines and driving adoption.</li>
+            <li>Managed the <strong>Redshift-to-Snowflake migration</strong> end to end, from requirements and user testing to global training, improving platform performance and reliability by over 50%.</li>
+          </ul>
+        </li>
+        <li>
+          <div class="rhead"><h4>Senior Analyst, Data Analytics &amp; Strategy</h4><span class="dates">Jan 2018 – Mar 2020</span></div>
+          <span class="focus">Advanced analytics &amp; data modeling</span>
+          <ul>
+            <li>Built data pipelines and models in SQL, Python, R and SAS across business use cases, improving analytical effectiveness by 25%.</li>
+            <li>Applied machine learning to 1st- and 3rd-party data and modernized SQL processing, reducing processing time by 30%.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <div class="company">
+        <h3>State of New Jersey, Higher Education Student Assistance Authority</h3>
+        <span class="meta">Hamilton, NJ · Dec 2016 – Jan 2018</span>
+      </div>
+      <ol class="ladder">
+        <li>
+          <div class="rhead"><h4>Program Manager, Grants &amp; Scholarships</h4><span class="dates">Dec 2016 – Jan 2018</span></div>
+          <ul>
+            <li>Designed and implemented a relational database replacing a siloed manual process for <strong>$1.5M in grants and scholarships</strong>, improving auditability and data quality.</li>
+            <li>Streamlined data structures and reporting and led adoption of the new platform, moving the team off legacy systems to a modern web-based environment.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-skills">
+    <div class="label" id="s-skills"><strong>Skills</strong>17 competencies</div>
+    <div class="groups">
+      <div class="group">
+        <h3>Platform &amp; data</h3>
+        <div class="chips">
+          <span class="chip key">Snowflake</span><span class="chip key">SQL</span><span class="chip">AWS</span><span class="chip">Redshift</span><span class="chip">Tableau</span><span class="chip">Data Modeling</span><span class="chip">Data Architecture &amp; Warehousing</span>
         </div>
-        <div class="m-side">
-          <div><b>Currently:</b> <span>VP, Product Management at Kinesso (IPG)</span></div>
-          <div><b>Based in:</b> <span>New York, NY</span></div>
-          <div><b>Genres:</b> <span>Data Architecture, Platform Strategy, Data Products</span></div>
+      </div>
+      <div class="group">
+        <h3>Governance &amp; quality</h3>
+        <div class="chips">
+          <span class="chip key">Metadata Management</span><span class="chip">Data Governance &amp; Privacy</span><span class="chip">Data Quality &amp; QA</span>
         </div>
-        <div class="episodes"><h4>Core Competencies</h4><div class="chips">${allSkills.map(s => `<span class="chip">${esc(s)}</span>`).join("")}</div></div>
-      </div>`);
-  });
+      </div>
+      <div class="group">
+        <h3>Product &amp; leadership</h3>
+        <div class="chips">
+          <span class="chip key">Data Product Leadership</span><span class="chip">Global Product Roadmaps</span><span class="chip">Data Strategy</span><span class="chip">Technical Requirements Translation</span><span class="chip">Technical Data Storytelling</span><span class="chip">Cross-Functional Leadership</span><span class="chip">Agile / Scrum</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  document.addEventListener("click", e => {
-    const el = e.target.closest("[data-role],[data-skill],[data-cred]");
-    if (!el) return;
-    if (el.dataset.role) roleModal(el.dataset.role);
-    else if (el.dataset.skill) skillModal(+el.dataset.skill);
-    else credModal(+el.dataset.cred);
-  });
+  <section aria-labelledby="s-edu">
+    <div class="label" id="s-edu"><strong>Education</strong>&amp; certifications</div>
+    <div class="edu">
+      <div class="edu-item">
+        <div class="rhead"><h4>Loyola University Maryland</h4><span class="dates">Baltimore, MD</span></div>
+        <p>BBA, Information Systems · Minor in Spanish · Alpha Iota Delta, National Decision Sciences Honor Society</p>
+      </div>
+      <div class="edu-item">
+        <div class="rhead"><h4>University of Alcalá de Henares</h4><span class="dates">Spring 2015</span></div>
+        <p>Study abroad · Madrid, Spain</p>
+      </div>
+      <ul class="certs">
+        <li><span class="c">SnowPro Associate: Platform<span>Snowflake</span></span><span class="dates">2025</span></li>
+        <li><span class="c">Agile Scrum Product Owner<span>EXIN</span></span><span class="dates">2025</span></li>
+        <li><span class="c">Data Analytics Professional Certificate<span>Google</span></span><span class="dates">2023</span></li>
+      </ul>
+    </div>
+  </section>
 
-  /* nav solid on scroll */
-  const nav = document.getElementById("nav");
-  const onScroll = () => nav.classList.toggle("solid", window.scrollY > 40);
-  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
-
-  /* copy email */
+  <footer>
+    <span>© 2026 Elizabeth Gehan</span>
+    <span>elizabethgehan.com</span>
+  </footer>
+</main>
+<script>
   const copyBtn = document.getElementById("copyEmail");
   copyBtn.addEventListener("click", () => {
-    const txt = document.getElementById("email").textContent;
+    const el = document.getElementById("email");
     const done = () => { copyBtn.textContent = "Copied"; setTimeout(() => copyBtn.textContent = "Copy", 1600); };
-    const fallback = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById("email")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = "Selected"; };
-    try { navigator.clipboard.writeText(txt).then(done, fallback); } catch (e) { fallback(); }
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = "Selected"; };
+    try { navigator.clipboard.writeText(el.textContent).then(done, fallback); } catch (e) { fallback(); }
   });
-})();
 </script>
 </body>
 </html>
