@@ -551,7 +551,8 @@ footer { padding-block: 40px 60px; color: var(--muted); font-size: 13.5px; }
     { t: "SnowPro Associate: Platform", s: "Snowflake", yr: "2025", art: "art-2", d: "Snowflake certification covering platform architecture, data loading, and core features." },
     { t: "Agile Scrum Product Owner", s: "EXIN", yr: "2025", art: "art-1", d: "Certification in backlog ownership, value delivery, and Scrum practice." },
     { t: "Data Analytics Professional Certificate", s: "Google", yr: "2023", art: "art-4", d: "Professional certificate covering the analytics lifecycle, SQL, and visualization." },
-    { t: "BBA, Information Systems", s: "Loyola University Maryland", yr: "Baltimore", art: "art-3", d: "Bachelor of Business Administration in Information Systems with a minor in Spanish. Alpha Iota Delta Honor Society. Studied abroad in Madrid, Spain." }
+    { t: "BBA, Information Systems", s: "Loyola University Maryland", yr: "Baltimore", art: "art-3", d: "Bachelor of Business Administration in Information Systems with a minor in Spanish. Alpha Iota Delta Honor Society. Studied abroad in Madrid, Spain." },
+    { t: "Study Abroad, Madrid", s: "University of Alcalá de Henares", yr: "Spring 2015", art: "art-5", d: "A semester of study abroad at the University of Alcalá de Henares outside Madrid, Spain, alongside a minor in Spanish at Loyola." }
   ];
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -712,7 +713,7 @@ footer { padding-block: 40px 60px; color: var(--muted); font-size: 13.5px; }
 
   const credModal = i => {
     const c = CREDS[i];
-    open(`${heroBlock(c.art, c.yr.slice(-2), "AWARD WINNER", c.t)}
+    open(`${heroBlock(c.art, c.yr.replace(/\D/g, "").slice(-2) || c.s[0], "AWARD WINNER", c.t)}
       <div class="m-body"><div>
         <div class="meta"><span class="match">${esc(c.s)}</span><span>${esc(c.yr)}</span></div>
         <p class="lead">${esc(c.d)}</p></div>
